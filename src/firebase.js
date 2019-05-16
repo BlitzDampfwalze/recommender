@@ -43,6 +43,12 @@ class Firebase {
   getCurrentUsername(){
     return this.auth.currentUser && this.auth.currentUser.displayName;
   }
+
+  async getRecommendations() {
+    const recommendations = await this.db.collection('recommendations').get();
+    return recommendations;
+  }
+  
 }
 
 export default new Firebase();
