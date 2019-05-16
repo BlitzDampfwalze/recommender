@@ -56,7 +56,10 @@ class Firebase {
     return this.db.collection('recommendations').add({
       recommendation
     })
-    
+  }
+
+  deleteRecommendation(id) {
+    return this.db.collection('recommendation').doc(id).delete();
   }
 
 }
