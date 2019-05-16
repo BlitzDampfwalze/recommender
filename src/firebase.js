@@ -48,7 +48,17 @@ class Firebase {
     const recommendations = await this.db.collection('recommendations').get();
     return recommendations;
   }
-  
+
+  addRecommendation(recommendation) {
+    if(!this.auth.currentUser) {
+      return alert('Not Authorized');
+    }
+    return this.db.collection('recommendations').add({
+      recommendation
+    })
+    
+  }
+
 }
 
 export default new Firebase();
