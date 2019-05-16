@@ -33,10 +33,10 @@ const Dashboard = (props) => {
 
   async function addRecommendation() {
     try {
-      await firebase.addRecommendation({ 
-        title, 
-        category, 
-        recommendation, 
+      await firebase.addRecommendation({
+        title,
+        category,
+        recommendation,
         author: firebase.auth.currentUser.uid
       });
       setCategory('');
@@ -80,14 +80,17 @@ const Dashboard = (props) => {
                 >
                   {recommendation.data.category}
                 </a>
-                <a
-                  href='/deleteRecommendation'
-                  className="card-footer-item"
-                  onClick={e => deleteRecommendation(e, recommendation.id)}
-                >
-                  Delete
+                {(firebase.auth.currentUser.uid == recommendation.data.author) ? (
+                  <a
+                    href='/deleteRecommendation'
+                    className="card-footer-item"
+                    onClick={e => deleteRecommendation(e, recommendation.id)}
+                  >
+                    Delete
                 </a>
-
+                ) : (
+                    ''
+                  )}
               </footer>
             </div>
           ))}
