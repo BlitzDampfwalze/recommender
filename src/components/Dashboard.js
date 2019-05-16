@@ -33,7 +33,12 @@ const Dashboard = (props) => {
 
   async function addRecommendation() {
     try {
-      await firebase.addRecommendation({ title, category, recommendation });
+      await firebase.addRecommendation({ 
+        title, 
+        category, 
+        recommendation, 
+        author: firebase.auth.currentUser.uid
+      });
       setCategory('');
       setTitle('');
       setRecommendation('');
@@ -44,7 +49,7 @@ const Dashboard = (props) => {
     }
   }
 
-  async function deleteRecommendation(e, id){
+  async function deleteRecommendation(e, id) {
     e.preventDefault();
     await firebase.deleteRecommendation(id);
     setLoading(true);
