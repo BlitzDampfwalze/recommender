@@ -10,19 +10,38 @@ const Dashboard = (props) => {
   const [category, setCategory] = useState('');
   const [recommendation, setRecommendation] = useState('');
   const [loading, setLoading] = useState(false);
+  const [authors, setAuthors] = useState({});
 
   useEffect(() => {
-    firebase.getRecommendations().then(recommendations => {
-      let newReviews = [];
-      recommendations.forEach(recommendation => {
-        newReviews.push({
-          id: recommendation.id,
-          data: recommendation.data().recommendation
-        });
+    let tempAuthors = {};
+    /*
+    [{uid.username}]
+    {uid:username, uid:username}
+    create a dictionary to eliminate looping twice
+    author[review.data.author]
+    */
+    firebase.getAuthors().then(results => {
+      results.forEach(doc => {
+        tempAuthors[doc.data().uid] = doc.data().username;
       });
-      setRecommendations(newReviews);
-      setLoading(false);
-    });
+
+      setAuthors(tempAuthors);
+
+      firebase.getRecommendations().then(recommendations => {
+        let newReviews = [];
+        recommendations.forEach(recommendation => {
+          newReviews.push({
+            id: recommendation.id,
+            data: recommendation.data().recommendation
+          });
+        });
+        setRecommendations(newReviews);
+        setLoading(false);
+      });
+
+    })
+
+    firebase.addAuthor();
   }, [loading]);
 
   if (!firebase.getCurrentUsername()) {
@@ -79,6 +98,12 @@ const Dashboard = (props) => {
                   className="card-footer-item"
                 >
                   {recommendation.data.category}
+                </a>
+                <a
+                  href={`/author/${recommendation.data.author}`}
+                  className="card-footer-item"
+                >
+                  {authors[recommendation.data.author]}
                 </a>
                 {(firebase.auth.currentUser.uid == recommendation.data.author) ? (
                   <a

@@ -19,7 +19,7 @@ class Firebase {
     this.db = app.firestore();
   }
 
-  isInitialized(){
+  isInitialized() {
     return new Promise(resolve => {
       this.auth.onAuthStateChanged(resolve);
     });
@@ -29,7 +29,7 @@ class Firebase {
     return this.auth.signInWithEmailAndPassword(email, password)
   }
 
-  logout(){
+  logout() {
     return this.auth.signOut();
   }
 
@@ -40,7 +40,7 @@ class Firebase {
     });
   }
 
-  getCurrentUsername(){
+  getCurrentUsername() {
     return this.auth.currentUser && this.auth.currentUser.displayName;
   }
 
@@ -50,7 +50,7 @@ class Firebase {
   }
 
   addRecommendation(recommendation) {
-    if(!this.auth.currentUser) {
+    if (!this.auth.currentUser) {
       return alert('Not Authorized');
     }
     return this.db.collection('recommendations').add({
@@ -60,6 +60,27 @@ class Firebase {
 
   deleteRecommendation(id) {
     return this.db.collection('recommendations').doc(id).delete();
+  }
+
+  async addAuthor() {
+    const author = await this.db.collection('authors').where('uid', '==', this.auth.currentUser.uid).get();
+    let count = 0;
+    author.forEach(val => {
+      count++;
+    })
+    if (!count) {
+      return this.db.collection('authors').add({
+        uid: this.auth.currentUser.uid,
+        username: this.auth.currentUser.displayName
+      })
+    } else {
+      return true;
+    }
+  }
+
+  async getAuthors() {
+    const authors = await this.db.collection('authors').get();
+    return authors;
   }
 
 }
