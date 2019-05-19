@@ -133,13 +133,20 @@ const Dashboard = (props) => {
             />
           </div>
           <div>
-            <input
-              placeholder="category"
-              type="text"
+            <select
               value={category}
               aria-label="category"
               onChange={e => setCategory(e.target.value)}
-            />
+            >
+            <option value="">Please Select...</option>
+            <option value="Show">Show (TV/Netflix/Hulu/etc)</option>
+            <option value="Book">Book</option>
+            <option value="Movie">Movie</option>
+            <option value="Podcast">Podcast</option>
+            <option value="SubReddit">SubReddit</option>
+            <option value="Youtube Channel">Youtube Channel</option>
+            <option value="Website">Website</option>
+            </select>
           </div>
           <div>
             <input
